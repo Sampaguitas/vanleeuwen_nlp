@@ -17,12 +17,17 @@ app.use(bodyParser.json());
 app.post("/", express.json(), (req, res) => {
     const agent = new WebhookClient({ request: req, response: res });
     let intentMap = new Map();
-    intentMap.set("Jason", exchangeRate);
+    intentMap.set("Jason", jason);
+    intentMap.set("Weight", weight);
     agent.handleRequest(intentMap);
 });
 
-function exchangeRate(agent) {
+function jason(agent) {
     agent.add('Jason is a nice guy but he does not know shit about programing!')
+}
+
+function weight(agent) {
+    agent.add('the weight of a 6-inch pipe schedule 40 is 28.26 kilograms')
 }
 
 
