@@ -14,22 +14,18 @@ app.use(bodyParser.json());
 //     res.status(200).send('');
 // });
 
-app.post("/dialogflow", express.json(), (req, res) => {
+app.post("/", express.json(), (req, res) => {
     const agent = new WebhookClient({ request: req, response: res });
     let intentMap = new Map();
-    intentMap.set("Default Welcome Intent", welcome);
-    intentMap.set("Default Fallback Intent", defaultFallback);
+    intentMap.set("Jason", exchangeRate);
     agent.handleRequest(intentMap);
 });
 
-function welcome(agent) {
-    agent.add('Hi, I am assistant. I can help you in various service. How can I help you today?');
+function exchangeRate(agent) {
+    agent.add('Jason is a nice guy but he does not know shit about programing!')
 }
 
 
-function defaultFallback(agent) {
-    agent.add('Sorry! I am unable to understand this at the moment. I am still learning humans. You can pick any of the service that might help me.');
-}
 module.exports = { welcome: welcome, defaultFallback: defaultFallback };
 
 
