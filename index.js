@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 //     res.status(200).send('');
 // });
 
-app.post("/", express.json(), (req, res) => {
+app.post("/dialogflow", express.json(), (req, res) => {
     const agent = new WebhookClient({ request: req, response: res });
     let intentMap = new Map();
     intentMap.set("Jason", jason);
