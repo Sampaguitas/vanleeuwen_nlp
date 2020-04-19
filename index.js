@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 mongoose.set('useFindAndModify', false);
 const bodyParser = require('body-parser');
 const app = express();
+const _ = require('lodash');
 
 let sizes = require('./_constants/sizes');
 
@@ -36,8 +37,6 @@ function welcome(agent) {
 function getOd(agent) {
     let sizeOne = _.isArray(agent.parameters.sizeOne) && !_.isEmpty(agent.parameters.sizeOne) ? agent.parameters.sizeOne[0] :  agent.parameters.sizeOne;
     let item = _.isArray(agent.parameters.item) && !_.isEmpty(agent.parameters.item) ? agent.parameters.item[0] :  agent.parameters.item;
-    console.log('sizeOne:', sizeOne);
-    console.log('sizes:', sizes);
     if (item != 'pipe') {
         agent.add(`Sorry, I havn't been trained to retrive the OD of ${items} yet`);
     } else {
