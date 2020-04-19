@@ -65,7 +65,7 @@ module.exports = { welcome: welcome, getOd, getOd };
 
 
 // Listen on port
-const port = 8080//process.env.PORT || 5000;
+const port = process.env.PORT || 8080// || 5000;
 app.listen(port, () => console.log(`Server running on ${port}`));
 
 // Compile all routers   
