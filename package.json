@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "tunnel": "ngrok http 5000"
   },
   "engines": {
     "node": "8.11.3"
@@ -25,6 +26,8 @@
     "fs": "0.0.1-security",
     "glob": "^7.1.6",
     "lodash": "^4.17.15",
+    "mongoose": "^5.9.9",
+    "ngrok": "^3.1.0",
     "uuid": "^7.0.3"
   }
 }
