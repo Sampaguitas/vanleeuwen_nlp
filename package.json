@@ -4,8 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "tunnel": "ngrok http 5000"
+    "start": "node index.js"
   },
   "engines": {
     "node": "8.11.3"
