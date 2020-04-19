@@ -46,7 +46,7 @@ function getOd(agent) {
     } else {
         let found = sizes.find(element => element.tags.includes(sizeOne));
         if (!_.isUndefined(found) && !!found.mm) {
-            agent.add(`the Outsize Diameter of a ${sizeOne} pipe is ${found.mm} millimeters`);
+            agent.add(`the Outside Diameter of a ${sizeOne} pipe is ${found.mm} millimeters`);
         }
     }
 }
