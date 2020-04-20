@@ -23,7 +23,6 @@ mongoose
 const { WebhookClient } = require("dialogflow-fulfillment");
 
 app.post("/dialogflow", express.json(), (req, res) => {
-    console.log('toto');
     const agent = new WebhookClient({ request: req, response: res });
     let intentMap = new Map();
     intentMap.set("Default Welcome Intent", welcome);
@@ -44,7 +43,7 @@ function getOutsideDiameter(agent) {
         case 'pipe':
             let found = dimensions.find(element => element.item === item && element.sizeOne.tags.includes(sizeOne));
             if (!_.isUndefined(found) && found.dimensions.hasOwnProperty('outsideDiameter')) {
-                return agent.add(`the outside diameter of a ${sizeOne} ${item} is ${found.dimensions.outsideDiameter.metric.value} ${found.dimensions.outsideDiameter.metric.uom}`);
+                return agent.add(`According to ASME B36.10/19, the outside diameter of a ${sizeOne} ${item} is ${found.dimensions.outsideDiameter.metric.value} ${found.dimensions.outsideDiameter.metric.uom}`);
             } else {
                 return agent.add(`Sorry. I could not find the outside diameter for this item`);
             }
@@ -62,9 +61,9 @@ function getWallThickness(agent) {
                 return element.item === item && element.sizeOne.tags.includes(sizeOne) && element.scheduleOne.tags.includes(scheduleOne);
             });
             if (!_.isUndefined(found) && found.dimensions.hasOwnProperty('wallThickness')) {
-                return agent.add(`the wall thickness of a ${sizeOne} ${item} ${scheduleOne} is ${found.dimensions.wallThickness.metric.value} ${found.dimensions.wallThickness.metric.uom}`);
+                return agent.add(`According to ASME B36.10/19, the wall thickness of a ${sizeOne} ${item} ${scheduleOne} is ${found.dimensions.wallThickness.metric.value} ${found.dimensions.wallThickness.metric.uom}`);
             } else {
-                return agent.add(`Sorry. I could not find the wall thickness for this item`);
+                return agent.add(`Sorry. I could not find the wall thickness for this item.`);
             }
         default: agent.add(`Sorry, I havn't been trained for ${item} yet`);
     }
@@ -80,7 +79,7 @@ function getWeight(agent) {
                 return element.item === item && element.sizeOne.tags.includes(sizeOne) && element.scheduleOne.tags.includes(scheduleOne);
             });
             if (!_.isUndefined(found) && found.dimensions.hasOwnProperty('weight')) {
-                return agent.add(`the weight of a ${sizeOne} ${item} ${scheduleOne} is ${found.dimensions.weight.metric.value} ${found.dimensions.weight.metric.uom}`);
+                return agent.add(`According to ASME B36.10/19, the weight of a ${sizeOne} ${item} ${scheduleOne} is ${found.dimensions.weight.metric.value} ${found.dimensions.weight.metric.uom}`);
             } else {
                 return agent.add(`Sorry. I could not find the weight for this item`);
             }
