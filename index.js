@@ -37,13 +37,15 @@ function welcome(agent) {
 }
 
 function getOutsideDiameter(agent) {
+    let isStainless = /(5S|10S|40S|80S)/;
     let sizeOne = _.isArray(agent.parameters.sizeOne) && !_.isEmpty(agent.parameters.sizeOne) ? agent.parameters.sizeOne[0] :  agent.parameters.sizeOne;
+    let scheduleOne = _.isArray(agent.parameters.scheduleOne) && !_.isEmpty(agent.parameters.scheduleOne) ? agent.parameters.scheduleOne[0] :  agent.parameters.scheduleOne;
     let item = _.isArray(agent.parameters.item) && !_.isEmpty(agent.parameters.item) ? agent.parameters.item[0] :  agent.parameters.item;
     switch (item) {
         case 'pipe':
             let found = dimensions.find(element => element.item === item && element.sizeOne.tags.includes(sizeOne));
             if (!_.isUndefined(found) && found.dimensions.hasOwnProperty('outsideDiameter')) {
-                return agent.add(`According to ASME B36.10/19, the outside diameter of a ${sizeOne} ${item} is ${found.dimensions.outsideDiameter.metric.value} ${found.dimensions.outsideDiameter.metric.uom}`);
+                return agent.add(`${isStainless.test(scheduleOne) ? 'According to ASME B36.19' : 'According to ASME B36.10'}, the outside diameter of a ${sizeOne} ${item} is ${found.dimensions.outsideDiameter.metric.value} ${found.dimensions.outsideDiameter.metric.uom}`);
             } else {
                 return agent.add(`Sorry. I could not find the outside diameter for this item`);
             }
@@ -52,6 +54,7 @@ function getOutsideDiameter(agent) {
 }
 
 function getWallThickness(agent) {
+    let isStainless = /(5S|10S|40S|80S)/;
     let sizeOne = _.isArray(agent.parameters.sizeOne) && !_.isEmpty(agent.parameters.sizeOne) ? agent.parameters.sizeOne[0] :  agent.parameters.sizeOne;
     let scheduleOne = _.isArray(agent.parameters.scheduleOne) && !_.isEmpty(agent.parameters.scheduleOne) ? agent.parameters.scheduleOne[0] :  agent.parameters.scheduleOne;
     let item = _.isArray(agent.parameters.item) && !_.isEmpty(agent.parameters.item) ? agent.parameters.item[0] :  agent.parameters.item;
@@ -61,7 +64,7 @@ function getWallThickness(agent) {
                 return element.item === item && element.sizeOne.tags.includes(sizeOne) && element.scheduleOne.tags.includes(scheduleOne);
             });
             if (!_.isUndefined(found) && found.dimensions.hasOwnProperty('wallThickness')) {
-                return agent.add(`According to ASME B36.10/19, the wall thickness of a ${sizeOne} ${item} ${scheduleOne} is ${found.dimensions.wallThickness.metric.value} ${found.dimensions.wallThickness.metric.uom}`);
+                return agent.add(`${isStainless.test(scheduleOne) ? 'According to ASME B36.19' : 'According to ASME B36.10'}, the wall thickness of a ${sizeOne} ${item} ${scheduleOne} is ${found.dimensions.wallThickness.metric.value} ${found.dimensions.wallThickness.metric.uom}`);
             } else {
                 return agent.add(`Sorry. I could not find the wall thickness for this item.`);
             }
@@ -70,6 +73,7 @@ function getWallThickness(agent) {
 }
 
 function getWeight(agent) {
+    let isStainless = /(5S|10S|40S|80S)/;
     let sizeOne = _.isArray(agent.parameters.sizeOne) && !_.isEmpty(agent.parameters.sizeOne) ? agent.parameters.sizeOne[0] :  agent.parameters.sizeOne;
     let scheduleOne = _.isArray(agent.parameters.scheduleOne) && !_.isEmpty(agent.parameters.scheduleOne) ? agent.parameters.scheduleOne[0] :  agent.parameters.scheduleOne;
     let item = _.isArray(agent.parameters.item) && !_.isEmpty(agent.parameters.item) ? agent.parameters.item[0] :  agent.parameters.item;
@@ -79,7 +83,7 @@ function getWeight(agent) {
                 return element.item === item && element.sizeOne.tags.includes(sizeOne) && element.scheduleOne.tags.includes(scheduleOne);
             });
             if (!_.isUndefined(found) && found.dimensions.hasOwnProperty('weight')) {
-                return agent.add(`According to ASME B36.10/19, the weight of a ${sizeOne} ${item} ${scheduleOne} is ${found.dimensions.weight.metric.value} ${found.dimensions.weight.metric.uom}`);
+                return agent.add(`${isStainless.test(scheduleOne) ? 'According to ASME B36.19' : 'According to ASME B36.10'}, the weight of a ${sizeOne} ${item} ${scheduleOne} is ${found.dimensions.weight.metric.value} ${found.dimensions.weight.metric.uom}`);
             } else {
                 return agent.add(`Sorry. I could not find the weight for this item`);
             }
