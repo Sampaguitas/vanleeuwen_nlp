@@ -117,6 +117,7 @@ function getWallThickness(agent) {
 }
 
 function getSchedule(agent) {
+    let thatSchedule = [];
     let sizeOne = _.isArray(agent.parameters.sizeOne) && !_.isEmpty(agent.parameters.sizeOne) ? agent.parameters.sizeOne[0] :  agent.parameters.sizeOne;
     let scheduleOne = _.isArray(agent.parameters.scheduleOne) && !_.isEmpty(agent.parameters.scheduleOne) ? agent.parameters.scheduleOne[0] :  agent.parameters.scheduleOne;
     let item = _.isArray(agent.parameters.item) && !_.isEmpty(agent.parameters.item) ? agent.parameters.item[0] :  agent.parameters.item;
@@ -126,16 +127,9 @@ function getSchedule(agent) {
                 return element.item === item && element.sizeOne.tags.includes(sizeOne) && element.scheduleOne.tags.includes(scheduleOne);
             });
             if (!_.isUndefined(found) && (!!found.scheduleOne.idt || !!found.scheduleOne.sch || !!found.scheduleOne.schS)) {
-                let thatSchedule = [];
-                if (!!found.scheduleOne.idt) {
-                    thatSchedule.push(found.scheduleOne.idt);
-                }
-                if (!!found.scheduleOne.sch) {
-                    thatSchedule.push(found.scheduleOne.sch);
-                }
-                if (!!found.scheduleOne.schS) {
-                    thatSchedule.push(found.scheduleOne.schS);
-                }
+                !!found.scheduleOne.idt && thatSchedule.push(found.scheduleOne.idt);
+                !!found.scheduleOne.sch && thatSchedule.push(found.scheduleOne.sch);
+                !!found.scheduleOne.schS && thatSchedule.push(found.scheduleOne.schS);
                 return agent.add(`The schedule of a ${sizeOne} ${item} ${scheduleOne} is ${thatSchedule.join(' - ')}. ${whatNext}`);
             } else {
                 return agent.add(`Sorry. I could not find the schedule for this item. ${whatNext}`);
