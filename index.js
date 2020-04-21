@@ -34,7 +34,7 @@ app.post("/dialogflow", express.json(), (req, res) => {
     intentMap.set("Nominal Pipe Size", getNominalPipeSize);
     intentMap.set("Nominal Diameter", getNominalDiameter);
     intentMap.set("Wall Thickness", getWallThickness);
-    intentMap.set("schedule", getSchedule);
+    intentMap.set("Schedule", getSchedule);
     intentMap.set("Weight", getWeight);
     agent.handleRequest(intentMap);
 });
