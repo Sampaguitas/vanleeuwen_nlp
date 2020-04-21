@@ -39,6 +39,17 @@ app.post("/dialogflow", express.json(), (req, res) => {
     agent.handleRequest(intentMap);
 });
 
+
+const whatNextPhrases = [
+    'What else can I help with?',
+    'What can I help with next?',
+    'What would you like to do?',
+    'Can I do anything else for you?' 
+];
+
+let whatNext = whatNextPhrases[Math.floor(Math.random() * whatNextPhrases.length)];
+    
+
 function welcome(agent) {
     agent.add('Hi, How can I help you today?');
 }
@@ -50,11 +61,11 @@ function getOutsideDiameter(agent) {
         case 'pipe':
             let found = dimensions.find(element => element.item === item && element.sizeOne.tags.includes(sizeOne));
             if (!_.isUndefined(found) && found.dimensions.hasOwnProperty('outsideDiameter')) {
-                return agent.end(`The outside diameter of a ${sizeOne} ${item} is ${found.dimensions.outsideDiameter.metric.value} ${found.dimensions.outsideDiameter.metric.uom}`);
+                return agent.add(`The outside diameter of a ${sizeOne} ${item} is ${found.dimensions.outsideDiameter.metric.value} ${found.dimensions.outsideDiameter.metric.uom}. ${whatNext}`);
             } else {
-                return agent.end(`Sorry. I could not find the outside diameter for this item`);
+                return agent.add(`Sorry. I could not find the outside diameter for this item. ${whatNext}`);
             }
-        default: agent.end(`Sorry, I havn't been trained for ${item} yet`);
+        default: agent.add(`Sorry, I havn't been trained for ${item} yet. ${whatNext}`);
     }
 }
 
@@ -65,11 +76,11 @@ function getNominalPipeSize(agent) {
         case 'pipe':
             let found = dimensions.find(element => element.item === item && element.sizeOne.tags.includes(sizeOne));
             if (!_.isUndefined(found) && !!found.sizeOne.nps) {
-                return agent.end(`The nominal pipe size of a ${sizeOne} ${item} is ${found.sizeOne.nps}`);
+                return agent.add(`The nominal pipe size of a ${sizeOne} ${item} is ${found.sizeOne.nps}. ${whatNext}`);
             } else {
-                return agent.end(`Sorry. I could not find the nominal pipe size for this item`);
+                return agent.add(`Sorry. I could not find the nominal pipe size for this item. ${whatNext}`);
             }
-        default: agent.end(`Sorry, I havn't been trained for ${item} yet`);
+        default: agent.add(`Sorry, I havn't been trained for ${item} yet. ${whatNext}`);
     }
 }
 
@@ -80,11 +91,11 @@ function getNominalDiameter(agent) {
         case 'pipe':
             let found = dimensions.find(element => element.item === item && element.sizeOne.tags.includes(sizeOne));
             if (!_.isUndefined(found) && !!found.sizeOne.dn) {
-                return agent.end(`The nominal diameter of a ${sizeOne} ${item} is ${found.sizeOne.dn}`);
+                return agent.add(`The nominal diameter of a ${sizeOne} ${item} is ${found.sizeOne.dn}. ${whatNext}`);
             } else {
-                return agent.end(`Sorry. I could not find the nominal diameter for this item`);
+                return agent.add(`Sorry. I could not find the nominal diameter for this item. ${whatNext}`);
             }
-        default: agent.end(`Sorry, I havn't been trained for ${item} yet`);
+        default: agent.add(`Sorry, I havn't been trained for ${item} yet. ${whatNext}`);
     }
 }
 
@@ -98,11 +109,11 @@ function getWallThickness(agent) {
                 return element.item === item && element.sizeOne.tags.includes(sizeOne) && element.scheduleOne.tags.includes(scheduleOne);
             });
             if (!_.isUndefined(found) && found.dimensions.hasOwnProperty('wallThickness')) {
-                return agent.end(`The wall thickness of a ${sizeOne} ${item} ${scheduleOne} is ${found.dimensions.wallThickness.metric.value} ${found.dimensions.wallThickness.metric.uom}`);
+                return agent.add(`The wall thickness of a ${sizeOne} ${item} ${scheduleOne} is ${found.dimensions.wallThickness.metric.value} ${found.dimensions.wallThickness.metric.uom}. ${whatNext}`);
             } else {
-                return agent.end(`Sorry. I could not find the wall thickness for this item.`);
+                return agent.add(`Sorry. I could not find the wall thickness for this item. ${whatNext}`);
             }
-        default: agent.end(`Sorry, I havn't been trained for ${item} yet`);
+        default: agent.add(`Sorry, I havn't been trained for ${item} yet. ${whatNext}`);
     }
 }
 
@@ -126,11 +137,11 @@ function getSchedule(agent) {
                 if (!!found.scheduleOne.schS) {
                     thatSchedule.push(found.scheduleOne.schS);
                 }
-                return agent.end(`The schedule of a ${sizeOne} ${item} ${scheduleOne} is ${thatSchedule.join(' - ')}`);
+                return agent.add(`The schedule of a ${sizeOne} ${item} ${scheduleOne} is ${thatSchedule.join(' - ')}. ${whatNext}`);
             } else {
-                return agent.end(`Sorry. I could not find the schedule for this item.`);
+                return agent.add(`Sorry. I could not find the schedule for this item. ${whatNext}`);
             }
-        default: agent.end(`Sorry, I havn't been trained for ${item} yet`);
+        default: agent.add(`Sorry, I havn't been trained for ${item} yet. ${whatNext}`);
     }
 }
 
@@ -144,11 +155,11 @@ function getWeight(agent) {
                 return element.item === item && element.sizeOne.tags.includes(sizeOne) && element.scheduleOne.tags.includes(scheduleOne);
             });
             if (!_.isUndefined(found) && found.dimensions.hasOwnProperty('weight')) {
-                return agent.end(`The weight of a ${sizeOne} ${item} ${scheduleOne} is ${found.dimensions.weight.metric.value} ${found.dimensions.weight.metric.uom}`);
+                return agent.add(`The weight of a ${sizeOne} ${item} ${scheduleOne} is ${found.dimensions.weight.metric.value} ${found.dimensions.weight.metric.uom}. ${whatNext}`);
             } else {
-                return agent.end(`Sorry. I could not find the weight for this item`);
+                return agent.add(`Sorry. I could not find the weight for this item. ${whatNext}`);
             }
-        default: agent.end(`Sorry, I havn't been trained for ${item} yet`);
+        default: agent.add(`Sorry, I havn't been trained for ${item} yet. ${whatNext}`);
     }
 }
 
