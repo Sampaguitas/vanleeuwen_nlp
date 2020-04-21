@@ -42,9 +42,8 @@ app.post("/dialogflow", express.json(), (req, res) => {
 
 const whatNextPhrases = [
     'What else can I help with?',
-    'What can I help with next?',
-    'What would you like to do?',
-    'Can I do anything else for you?' 
+    'Is there anithing else I can help you with?',
+    'What else would you like to know?', 
 ];
 
 let whatNext = whatNextPhrases[Math.floor(Math.random() * whatNextPhrases.length)];
