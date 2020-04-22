@@ -92,9 +92,15 @@ function exchangeRate(agent) {
     return getRate(currencyFrom, currencyTo)
     .then(res => {
         let conversion = Number(number) / Number(res.rateFrom) * Number(res.rateTo);
-        return agent.add(`${number} ${currencyFrom} is equal to ${Math.round((conversion + Number.EPSILON) * 1000000) / 1000000} ${currencyTo}. ${whatNext}`);
+        return agent.add(`${number} ${currencyFrom} is equal to ${Math.round((conversion + Number.EPSILON) * 100000) / 100000} ${currencyTo}. ${whatNext}`);
     })
-    .catch(() => agent.add(`${dontKnow}${whatNext}`));
+    .catch(err => {
+        switch(err) {
+            case 104: return agent.add(`I have reached my quota of currency conversion for this month, try next time... ${whatNext}`)
+            default: return agent.add(`Sorry, could not retrive this currency conversion... ${whatNext}`)
+        }
+        
+    });
 }
 
 function getRate(currencyFrom, currencyTo) {
@@ -112,7 +118,7 @@ function getRate(currencyFrom, currencyTo) {
                     rateTo: json.quotes[`USD${currencyTo}`],
                 })
             } else {
-                reject();
+                reject(json.error.code);
             }
         });
     });
