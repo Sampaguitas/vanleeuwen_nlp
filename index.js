@@ -4,6 +4,7 @@ mongoose.set('useFindAndModify', false);
 const bodyParser = require('body-parser');
 const app = express();
 const _ = require('lodash');
+const fetch = require("node-fetch");
 
 let dimensions = require('./_constants/dimensions');
 
@@ -13,6 +14,7 @@ app.use(bodyParser.json());
 
 //DB config
 const db = require('./config/keys').mongoURI;
+const currencylayer_key = require('./config/keys').currencylayer_key;
 
 //Connect to MongoDB
 mongoose
@@ -38,6 +40,7 @@ app.post("/dialogflow", express.json(), (req, res) => {
     intentMap.set("Wall Thickness", getWallThickness);
     intentMap.set("Schedule", getSchedule);
     intentMap.set("Weight", getWeight);
+    intentMap.set("Exchange Rate", exchangeRate);
     agent.handleRequest(intentMap);
 });
 
@@ -78,6 +81,41 @@ function fallback(agent) {
     let dontKnow = dontKnowArray[Math.floor(Math.random() * dontKnowArray.length)];
     let whatNext = whatNextArray[Math.floor(Math.random() * whatNextArray.length)];
     agent.add(`${dontKnow} ${whatNext}`);
+}
+
+function exchangeRate(agent) {
+    let dontKnow = dontKnowArray[Math.floor(Math.random() * dontKnowArray.length)];
+    let whatNext = whatNextArray[Math.floor(Math.random() * whatNextArray.length)];
+    let currencyFrom = _.isArray(agent.parameters.currencyFrom) && !_.isEmpty(agent.parameters.currencyFrom) ? agent.parameters.currencyFrom[0] :  agent.parameters.currencyFrom;
+    let currencyTo = _.isArray(agent.parameters.currencyTo) && !_.isEmpty(agent.parameters.currencyTo) ? agent.parameters.currencyTo[0] :  agent.parameters.currencyTo;
+    let number = _.isArray(agent.parameters.number) && !_.isEmpty(agent.parameters.number) ? agent.parameters.number[0] :  !!agent.parameters.number ? agent.parameters.number : 1;
+    return getRate(currencyFrom, currencyTo)
+    .then(res => {
+        let conversion = Number(number) / Number(res.rateFrom) * Number(res.rateTo);
+        return agent.add(`${number} ${currencyFrom} is equal to ${Math.round((conversion + Number.EPSILON) * 1000000) / 1000000} ${currencyTo}. ${whatNext}`);
+    })
+    .catch(() => agent.add(`${dontKnow}${whatNext}`));
+}
+
+function getRate(currencyFrom, currencyTo) {
+    return new Promise(function(resolve, reject) {
+        const requestOptions = {
+            method: 'GET',
+            headers: { 'Content-Type': 'application/json'},
+        }
+        return fetch(`http://apilayer.net/api/live?access_key=${currencylayer_key}&currencies=${currencyFrom},${currencyTo}&source=USD&format=1`, requestOptions)
+        .then(res => res.json())
+        .then(json => {
+            if (json.success) {
+                resolve({
+                    rateFrom: json.quotes[`USD${currencyFrom}`],
+                    rateTo: json.quotes[`USD${currencyTo}`],
+                })
+            } else {
+                reject();
+            }
+        });
+    });
 }
 
 function getOutsideDiameter(agent) {
@@ -198,7 +236,8 @@ module.exports = {
     getNominalDiameter: getNominalDiameter,
     getWallThickness: getWallThickness,
     getSchedule: getSchedule,
-    getWeight: getWeight
+    getWeight: getWeight,
+    exchangeRate: exchangeRate
 };
 
 // Listen on port
