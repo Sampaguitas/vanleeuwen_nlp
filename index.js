@@ -30,6 +30,7 @@ app.post("/dialogflow", express.json(), (req, res) => {
 
     let intentMap = new Map();
     intentMap.set("Default Welcome Intent", welcome);
+    intentMap.set("Fallback", fallback);
     intentMap.set("Outside Diameter", getOutsideDiameter);
     intentMap.set("Nominal Pipe Size", getNominalPipeSize);
     intentMap.set("Nominal Diameter", getNominalDiameter);
@@ -40,20 +41,31 @@ app.post("/dialogflow", express.json(), (req, res) => {
 });
 
 
-const whatNextPhrases = [
+
+const dontKnowArray = [
+    'Sorry I dont know how to answer to that yet but I\'m still learning...',
+    'I didnt get that...',
+    'I could not find the answer...',
+]
+
+const whatNextArray = [
     'What else can I help with?',
     'Is there anithing else I can help you with?',
     'What else would you like to know?', 
 ];
 
-let whatNext = whatNextPhrases[Math.floor(Math.random() * whatNextPhrases.length)];
-    
-
 function welcome(agent) {
     agent.add('Hi, How can I help you today?');
 }
 
+function fallback(agent) {
+    let dontKnow = dontKnowArray[Math.floor(Math.random() * dontKnowArray.length)];
+    let whatNext = whatNextArray[Math.floor(Math.random() * whatNextArray.length)];
+    agent.add(`${dontKnow} ${whatNext}`);
+}
+
 function getOutsideDiameter(agent) {
+    let whatNext = whatNextArray[Math.floor(Math.random() * whatNextArray.length)];
     let sizeOne = _.isArray(agent.parameters.sizeOne) && !_.isEmpty(agent.parameters.sizeOne) ? agent.parameters.sizeOne[0] :  agent.parameters.sizeOne;
     let item = _.isArray(agent.parameters.item) && !_.isEmpty(agent.parameters.item) ? agent.parameters.item[0] :  agent.parameters.item;
     switch (item) {
@@ -69,6 +81,7 @@ function getOutsideDiameter(agent) {
 }
 
 function getNominalPipeSize(agent) {
+    let whatNext = whatNextArray[Math.floor(Math.random() * whatNextArray.length)];
     let sizeOne = _.isArray(agent.parameters.sizeOne) && !_.isEmpty(agent.parameters.sizeOne) ? agent.parameters.sizeOne[0] :  agent.parameters.sizeOne;
     let item = _.isArray(agent.parameters.item) && !_.isEmpty(agent.parameters.item) ? agent.parameters.item[0] :  agent.parameters.item;
     switch (item) {
@@ -84,6 +97,7 @@ function getNominalPipeSize(agent) {
 }
 
 function getNominalDiameter(agent) {
+    let whatNext = whatNextArray[Math.floor(Math.random() * whatNextArray.length)];
     let sizeOne = _.isArray(agent.parameters.sizeOne) && !_.isEmpty(agent.parameters.sizeOne) ? agent.parameters.sizeOne[0] :  agent.parameters.sizeOne;
     let item = _.isArray(agent.parameters.item) && !_.isEmpty(agent.parameters.item) ? agent.parameters.item[0] :  agent.parameters.item;
     switch (item) {
@@ -99,6 +113,7 @@ function getNominalDiameter(agent) {
 }
 
 function getWallThickness(agent) {
+    let whatNext = whatNextArray[Math.floor(Math.random() * whatNextArray.length)];
     let sizeOne = _.isArray(agent.parameters.sizeOne) && !_.isEmpty(agent.parameters.sizeOne) ? agent.parameters.sizeOne[0] :  agent.parameters.sizeOne;
     let scheduleOne = _.isArray(agent.parameters.scheduleOne) && !_.isEmpty(agent.parameters.scheduleOne) ? agent.parameters.scheduleOne[0] :  agent.parameters.scheduleOne;
     let item = _.isArray(agent.parameters.item) && !_.isEmpty(agent.parameters.item) ? agent.parameters.item[0] :  agent.parameters.item;
@@ -118,6 +133,7 @@ function getWallThickness(agent) {
 
 function getSchedule(agent) {
     let thatSchedule = [];
+    let whatNext = whatNextArray[Math.floor(Math.random() * whatNextArray.length)];
     let sizeOne = _.isArray(agent.parameters.sizeOne) && !_.isEmpty(agent.parameters.sizeOne) ? agent.parameters.sizeOne[0] :  agent.parameters.sizeOne;
     let scheduleOne = _.isArray(agent.parameters.scheduleOne) && !_.isEmpty(agent.parameters.scheduleOne) ? agent.parameters.scheduleOne[0] :  agent.parameters.scheduleOne;
     let item = _.isArray(agent.parameters.item) && !_.isEmpty(agent.parameters.item) ? agent.parameters.item[0] :  agent.parameters.item;
@@ -139,6 +155,7 @@ function getSchedule(agent) {
 }
 
 function getWeight(agent) {
+    let whatNext = whatNextArray[Math.floor(Math.random() * whatNextArray.length)];
     let sizeOne = _.isArray(agent.parameters.sizeOne) && !_.isEmpty(agent.parameters.sizeOne) ? agent.parameters.sizeOne[0] :  agent.parameters.sizeOne;
     let scheduleOne = _.isArray(agent.parameters.scheduleOne) && !_.isEmpty(agent.parameters.scheduleOne) ? agent.parameters.scheduleOne[0] :  agent.parameters.scheduleOne;
     let item = _.isArray(agent.parameters.item) && !_.isEmpty(agent.parameters.item) ? agent.parameters.item[0] :  agent.parameters.item;
@@ -158,6 +175,7 @@ function getWeight(agent) {
 
 module.exports = { 
     welcome: welcome,
+    fallback: fallback,
     getOutsideDiameter: getOutsideDiameter,
     getNominalPipeSize: getNominalPipeSize,
     getNominalDiameter: getNominalDiameter,
