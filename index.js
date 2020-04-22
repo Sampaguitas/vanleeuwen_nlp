@@ -29,7 +29,7 @@ app.post("/dialogflow", express.json(), (req, res) => {
     // console.log('Dialogflow Request body: ' + JSON.stringify(req.body));
 
     let intentMap = new Map();
-    intentMap.set("Default Welcome Intent", welcome);
+    intentMap.set("Welcome", welcome);
     intentMap.set("Fallback", fallback);
     intentMap.set("Outside Diameter", getOutsideDiameter);
     intentMap.set("Nominal Pipe Size", getNominalPipeSize);
