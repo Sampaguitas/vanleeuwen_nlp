@@ -31,6 +31,7 @@ app.post("/dialogflow", express.json(), (req, res) => {
     let intentMap = new Map();
     intentMap.set("Welcome", welcome);
     intentMap.set("Fallback", fallback);
+    intentMap.set("Goodbye", goodbye);
     intentMap.set("Outside Diameter", getOutsideDiameter);
     intentMap.set("Nominal Pipe Size", getNominalPipeSize);
     intentMap.set("Nominal Diameter", getNominalDiameter);
@@ -39,8 +40,6 @@ app.post("/dialogflow", express.json(), (req, res) => {
     intentMap.set("Weight", getWeight);
     agent.handleRequest(intentMap);
 });
-
-
 
 const dontKnowArray = [
     'Sorry I dont know how to answer to that yet but I\'m still learning...',
@@ -54,8 +53,25 @@ const whatNextArray = [
     'What else would you like to know?', 
 ];
 
+const goodDayArray = [
+    'Hi, How can I help you today?',
+    'Hey there, Challange me with a tough question!',
+];
+
+const seeYouArray = [
+    'OK, see you next time!',
+    'OK, Ending the conversation now!',
+    'it was a pleasure to help you!',
+]
+
 function welcome(agent) {
-    agent.add('Hi, How can I help you today?');
+    let goodDay = goodDayArray[Math.floor(Math.random() * goodDayArray.length)];
+    agent.add(`${goodDay}`);
+}
+
+function goodbye(agent) {
+    let seeYou = seeYouArray[Math.floor(Math.random() * seeYouArray.length)];
+    agent.end(`${seeYou}`);
 }
 
 function fallback(agent) {
@@ -176,6 +192,7 @@ function getWeight(agent) {
 module.exports = { 
     welcome: welcome,
     fallback: fallback,
+    goodbye: goodbye,
     getOutsideDiameter: getOutsideDiameter,
     getNominalPipeSize: getNominalPipeSize,
     getNominalDiameter: getNominalDiameter,
