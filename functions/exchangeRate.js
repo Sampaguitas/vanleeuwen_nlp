@@ -11,12 +11,23 @@ function exchangeRate(agent) {
     return getRate(currencyFrom, currencyTo)
     .then(res => {
         let conversion = Number(number) / Number(res.rateFrom) * Number(res.rateTo);
-        return agent.add(`${number} ${currencyFrom} is equal to ${Math.round((conversion + Number.EPSILON) * 100000) / 100000} ${currencyTo}. ${whatNext}`);
+        return (
+            agent.add(`${number} ${currencyFrom} is equal to ${Math.round((conversion + Number.EPSILON) * 100000) / 100000} ${currencyTo}.`),
+            agent.add(`${whatNext}`)
+        );
     })
     .catch(err => {
         switch(err) {
-            case 104: return agent.add(`I have reached my quota of currency conversion for this month, try next time... ${whatNext}`)
-            default: return agent.add(`Sorry, could not retrive this currency conversion... ${whatNext}`)
+            case 104: 
+                return (
+                    agent.add(`I have reached my quota of currency conversion for this month...`),
+                    agent.add(`${whatNext}`)
+                );
+            default: 
+                return (
+                    agent.add(`Sorry, could not retrive this currency conversion...`),
+                    agent.add(`${whatNext}`)
+                );
         }
     });
 }

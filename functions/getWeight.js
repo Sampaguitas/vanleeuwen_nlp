@@ -15,13 +15,23 @@ function getWeight(agent) {
                 ['scheduleOne.tags']: scheduleOne
             }, function (err, res) {
                 if (err || !res) {
-                    return agent.add(`Sorry. I could not find the weight for this item. ${whatNext}`);
+                    return (
+                        agent.add(`Sorry. I could not find the weight for this item.`),
+                        agent.add(`${whatNext}`)
+                    );
                 } else {
                     let { weight } = res.dimensions;
-                    return agent.add(`${weight.display} of a ${sizeOne} ${item} ${scheduleOne} is ${weight.metric.value} ${weight.metric.uom}. ${whatNext}`);
+                    return (
+                        agent.add(`${weight.display} of a ${sizeOne} ${item} ${scheduleOne} is ${weight.metric.value}`),
+                        agent.add(`${weight.metric.uom}. ${whatNext}`)
+                    );
                 }
             });
-        default: agent.add(`Sorry, I havn't been trained for ${item} yet. ${whatNext}`);
+        default: 
+            return (
+                agent.add(`Sorry, I havn't been trained for ${item} yet.`),
+                agent.add(`${whatNext}`)
+            );
     }
 }
 

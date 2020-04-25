@@ -7,18 +7,32 @@ function getNominalPipeSize(agent) {
     let sizeOne = _.isArray(agent.parameters.sizeOne) && !_.isEmpty(agent.parameters.sizeOne) ? agent.parameters.sizeOne[0] :  agent.parameters.sizeOne;
     let item = _.isArray(agent.parameters.item) && !_.isEmpty(agent.parameters.item) ? agent.parameters.item[0] :  agent.parameters.item;
     switch (item) {
+        case 'cap':
+        case 'elbow':
         case 'pipe':
+        case 'reducer':
+        case 'tee':
             return Dimension.findOne({
                 item: item,
                 ['sizeOne.tags']: sizeOne
             }, function (err, res) {
                 if (err || !res) {
-                    return agent.add(`Sorry. I could not find the nominal pipe size for this item. ${whatNext}`);
+                    return (
+                        agent.add(`Sorry. I could not find the nominal pipe size for this item.`),
+                        agent.add(`${whatNext}`)
+                    );
                 } else {
-                    return agent.add(`The nominal pipe size of a ${sizeOne} ${item} is ${res.sizeOne.nps}. ${whatNext}`);
+                    return (
+                        agent.add(`The nominal pipe size of a ${sizeOne} ${item} is ${res.sizeOne.nps}.`),
+                        agent.add(`${whatNext}`)
+                    );
                 }
             });
-        default: agent.add(`Sorry, I havn't been trained for ${item} yet. ${whatNext}`);
+        default: 
+            return (
+                agent.add(`Sorry, I havn't been trained for ${item} yet.`),
+                agent.add(`${whatNext}`)
+            );
     }
 }
 
