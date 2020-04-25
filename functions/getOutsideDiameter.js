@@ -3,11 +3,18 @@ const Dimension = require('../models/Dimension');
 const constants = require('../constants')
 
 function getOutsideDiameter(agent) {
+    //console.log(agent.session);
+    // let ctx = `${agent.session}/contexts/outside_diameter_dialog_params_item`
     let whatNext = constants.whatNextArray[Math.floor(Math.random() * constants.whatNextArray.length)];
     let sizeOne = _.isArray(agent.parameters.sizeOne) && !_.isEmpty(agent.parameters.sizeOne) ? agent.parameters.sizeOne[0] :  agent.parameters.sizeOne;
     let item = _.isArray(agent.parameters.item) && !_.isEmpty(agent.parameters.item) ? agent.parameters.item[0] :  agent.parameters.item;
+    // let angle = _.isArray(agent.parameters.angle) && !_.isEmpty(agent.parameters.angle) ? agent.parameters.angle[0] :  agent.parameters.angle;
+    // let radius = _.isArray(agent.parameters.radius) && !_.isEmpty(agent.parameters.radius) ? agent.parameters.radius[0] :  agent.parameters.radius;
     switch (item) {
-        case 'pipe':
+        case 'cap':
+        case 'elbow':
+        case 'reducer':
+        case 'tee':
             return Dimension.findOne({
                 item: item,
                 ['sizeOne.tags']: sizeOne
