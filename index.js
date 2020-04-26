@@ -2,9 +2,12 @@ const express = require("express");
 const mongoose = require('mongoose');
 mongoose.set('useFindAndModify', false);
 const bodyParser = require('body-parser');
-const app = express();
-
+fs = require('fs');
 let functions = require('./functions');
+const constants = require('./constants');
+
+
+const app = express();
 
 //bodyParser middleware
 app.use(bodyParser.urlencoded({extended:false}));
@@ -27,9 +30,12 @@ app.post("/dialogflow", express.json(), (req, res) => {
     // console.log('Dialogflow Request headers: ' + JSON.stringify(req.headers));
     // console.log('Dialogflow Request body: ' + JSON.stringify(req.body));
 
+    // fs.writeFile('./generate/responce/headers.json', JSON.stringify(req.headers));
+    // fs.writeFile('./generate/responce/body.json', JSON.stringify(req.body));
+
     let intentMap = new Map();
     intentMap.set("Welcome", functions.welcome);
-    intentMap.set("Fallback", functions.fallback);
+    intentMap.set("Fallback", fallback);
     intentMap.set("Goodbye", functions.goodbye);
     intentMap.set("Outside Diameter", functions.getOutsideDiameter);
     intentMap.set("Nominal Pipe Size", functions.getNominalPipeSize);
@@ -40,6 +46,13 @@ app.post("/dialogflow", express.json(), (req, res) => {
     intentMap.set("Exchange Rate", functions.exchangeRate);
     agent.handleRequest(intentMap);
 });
+
+function fallback(agent) {
+    let dontKnow = constants.dontKnowArray[Math.floor(Math.random() * constants.dontKnowArray.length)];
+    let whatNext = constants.whatNextArray[Math.floor(Math.random() * constants.whatNextArray.length)];
+    agent.add(`${dontKnow}`);
+    agent.add(`${whatNext}`);
+}
 
 // Listen on port
 const port = process.env.PORT || 5000;
