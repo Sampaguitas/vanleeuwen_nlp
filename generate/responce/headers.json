@@ -1,0 +1,10 @@
+{
+    "content-type": "application/json",
+    "host": "sampaguitas.ngrok.io",
+    "content-length": "752",
+    "accept": "*/*",
+    "user-agent": "Google-Dialogflow",
+    "accept-encoding": "gzip,deflate,br",
+    "x-forwarded-proto": "https",
+    "x-forwarded-for": "66.249.84.65"
+}

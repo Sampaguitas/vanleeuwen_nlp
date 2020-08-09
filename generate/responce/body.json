@@ -1,0 +1,33 @@
+{
+    "responseId": "b714ae33-efd8-4129-ad61-a53845e7e732-eec93b43",
+    "queryResult": {
+        "queryText": "S40",
+        "parameters": {
+            "item": "pipe",
+            "sizeOne": "4\"",
+            "scheduleOne": "S40",
+            "angle": "",
+            "radius": ""
+        },
+        "allRequiredParamsPresent": true,
+        "fulfillmentMessages": [
+            {
+                "text": {
+                    "text": [
+                        ""
+                    ]
+                }
+            }
+        ],
+        "intent": {
+            "name": "projects/vanleeuwen-nlp-runewe/agent/intents/55c94665-7a7f-4335-b72a-764d656a4c89",
+            "displayName": "Weight"
+        },
+        "intentDetectionConfidence": 1,
+        "languageCode": "en"
+    },
+    "originalDetectIntentRequest": {
+        "payload": {}
+    },
+    "session": "projects/vanleeuwen-nlp-runewe/agent/sessions/1c2a241f-fb76-b58b-1639-ea8a227c9fa3"
+}

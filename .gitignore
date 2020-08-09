@@ -5,7 +5,7 @@
 /node_modules
 
 # testing
-/generate
+# /generate
 
 # production
 /build
